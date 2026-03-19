@@ -1,3 +1,6 @@
-$Arhivs = "$env:USERPROFILE\Documents\PDF_Backup.zip"
-$PDF = Get-ChildItem "$env:USERPROFILE\Downloads" -Filter *.pdf | Where-Object { $_.LastWriteTime -gt (Get-Date).AddHours(-48) }
-Compress-Archive -Path $PDF.FullName -DestinationPath $Arhivs -Force
+$AV = Get-MpComputerStatus
+$Reitings = 100
+if ($AV.RealTimeProtectionEnabled -eq $false) { $Reitings -= 50 }
+if ($AV.AntivirusSignatureAge -gt 3) { $Reitings -= 20 }
+if ($AV.QuickScanAge -gt 7) { $Reitings -= 20 }
+Write-Host "Sistēmas drošības reitings: $Reitings / 100"
